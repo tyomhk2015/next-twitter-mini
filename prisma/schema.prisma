@@ -13,7 +13,7 @@ datasource db {
 model User {
   id        Int       @id @default(autoincrement())
   email     String    @unique
-  phone     String?    @unique
+  phone     String?   @unique
   password  String
   name      String
   posts     Post[]
@@ -28,18 +28,18 @@ model Post {
   description String
   attachment  String? // img or video
   createdAt   DateTime  @default(now())
-  user        User      @relation(fields: [authorId], references: [id])
-  authorId    Int       @unique
+  author      User      @relation(fields: [authorId], references: [id])
+  authorId    Int
   likes       Like[]
   comments    Comment[]
 }
 
 model Like {
   id        Int      @id @default(autoincrement())
-  post      Post     @relation(fields: [postId], references: [id])
-  postId    Int      @unique
-  user      User     @relation(fields: [likedId], references: [id])
-  likedId   Int      @unique
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId    Int
+  user      User     @relation(fields: [likedId], references: [id], onDelete: Cascade)
+  likedId   Int
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
 }

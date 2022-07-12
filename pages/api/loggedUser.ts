@@ -1,6 +1,6 @@
 import { withIronSessionApiRoute } from "iron-session/next";
 import { NextApiRequest, NextApiResponse } from "next";
-import client from "../lib/prisma";
+import client from "../../lib/db";
 
 declare module "iron-session" {
   interface IronSessionData {
@@ -28,6 +28,18 @@ async function loggedUserHandler(
   const fetchedUser = await client.user.findUnique({
     where: {
       id: req.session.user?.id
+    },
+    include: {
+      likes: {
+        where: {
+          likedId: req.session.user?.id
+        },
+        select: {
+          likedId: true,
+          postId: true,
+          id: true
+        }
+      }
     }
   });
 

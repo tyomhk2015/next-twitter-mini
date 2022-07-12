@@ -1,7 +1,7 @@
 import { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { useForm, SubmitHandler, SubmitErrorHandler } from "react-hook-form";
+import { useForm, SubmitHandler } from "react-hook-form";
 
 interface ISignInForm {
   email: string;
@@ -40,14 +40,10 @@ const Login: NextPage = () => {
     setLoading(false);
   };
 
-  const onInvalid: SubmitErrorHandler<ISignInForm> = (errors) => {
-    console.log("error", errors);
-  };
-
   return (
     <div>
       <h1>Sign Up</h1>
-      <form onSubmit={handleSubmit(onValid, onInvalid)}>
+      <form onSubmit={handleSubmit(onValid)}>
         {errors.email && (
           <p className={`text-red-500 font-bold`}>
             Please write proper email address.
