@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import client from "../lib/prisma";
+import client from "../../lib/db";
 
 export default async function signUpHandler(
   req: NextApiRequest,

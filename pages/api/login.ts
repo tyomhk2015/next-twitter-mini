@@ -1,6 +1,6 @@
 import { withIronSessionApiRoute } from "iron-session/next";
 import { NextApiRequest, NextApiResponse } from "next";
-import client from "../lib/prisma";
+import client from "../../lib/db";
 
 interface ILoginForm {
   email: string;
@@ -40,8 +40,6 @@ async function loginHandler(req: NextApiRequest, res: NextApiResponse) {
   };
 
   await req.session.save();
-
-  console.log("backend", req.session);
 
   res.json({
     ok: true,
