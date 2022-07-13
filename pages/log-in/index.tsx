@@ -2,6 +2,7 @@ import { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
+import useSWR, { useSWRConfig } from "swr";
 
 interface ISignInForm {
   email: string;
@@ -9,15 +10,22 @@ interface ISignInForm {
   password: string;
 }
 
+interface IMutateState {
+  ok: boolean;
+  error?: string;
+  id?: number;
+}
+
 const Login: NextPage = () => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [accountError, setAccountError] = useState(false);
+  const { mutate } = useSWRConfig();
 
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors }
   } = useForm<ISignInForm>();
 
   const onValid: SubmitHandler<ISignInForm> = async (data) => {
@@ -26,13 +34,18 @@ const Login: NextPage = () => {
     const response = await fetch("/api/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
+      body: JSON.stringify(data)
     });
 
     const result = await response.json();
 
     if (result.ok && result.user) {
       setAccountError(false);
+      mutate(
+        "/api/loggedUser",
+        (prev: IMutateState) => ({ ...prev, id: result.user.id }),
+        true
+      );
       router.push("/");
     }
 
@@ -60,8 +73,8 @@ const Login: NextPage = () => {
               isEmail: (currentValue) =>
                 /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g.test(
                   currentValue
-                ),
-            },
+                )
+            }
           })}
           type="email"
           placeholder="sample@sample.com"
@@ -76,8 +89,8 @@ const Login: NextPage = () => {
           {...register("password", {
             required: "Password is required",
             validate: {
-              isEmpty: (currentValue) => !!currentValue,
-            },
+              isEmpty: (currentValue) => !!currentValue
+            }
           })}
           type="password"
           placeholder="Password"

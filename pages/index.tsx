@@ -6,7 +6,7 @@ import PostList from "../components/PostList";
 
 export default () => {
   const router = useRouter();
-  const { data, mutate ,error } = useSWR("/api/loggedUser");
+  const { data, mutate, error } = useSWR("/api/loggedUser");
   const { data: postData, mutate: postMutate } = useSWR("/api/post");
 
   mutate(); // Revalidate session.
@@ -14,22 +14,18 @@ export default () => {
 
   useEffect(() => {
     const isLoading = !data && !error;
-
     // Prevent redirection when the page is at initial state.
     if (isLoading) return;
 
-    if (data && data.error) {
+    if (data && !data.id) {
       router.push("/create-account");
     }
-
-  }, [data, router, mutate]);
+  }, [data, router, mutate, error]);
 
   return (
     <>
-      <PostForm authorId={data?.id && data?.id}/>
-      {postData?.posts && (
-        <PostList posts={postData?.posts}/>
-      )}
-  </>
-  )
-}
+      <PostForm authorId={data?.id && data?.id} />
+      {postData?.posts && <PostList posts={postData?.posts} />}
+    </>
+  );
+};
