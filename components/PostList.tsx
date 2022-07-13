@@ -1,5 +1,5 @@
 import Link from "next/link";
-import React, { useState } from "react";
+import React from "react";
 
 interface IAuthor {
   id: number;
@@ -20,17 +20,14 @@ interface IPostListProp {
 }
 
 const PostList: React.FC<IPostListProp> = ({posts}) => {
-  const [loading, setLoading] = useState(false);
-
-  console.log(posts);
   return (
-    <ol>
+    <ol className={`text-white px-2 py-4`}>
       {posts.map((post) => {
         return (
-        <li key={post.id} className={`first-of-type:mt-0 mt-2`}>
+        <li key={post.id} className={`first-of-type:mt-0 mt-2 rounded-lg border-gray-500 border-[1px]`}>
           {
             <Link href={`/tweet/${post.id}`}>
-              <a className={`p-2 cursor-pointer`}>{post.author.name}: {post.description}</a>
+              <a className={`cursor-pointer p-2 grid`}>{post.description}<span className={`place-self-end text-sm`}>Author: {post.author.name}</span></a>
             </Link>
           }
         </li>)

@@ -41,15 +41,19 @@ const Login: NextPage = () => {
   };
 
   return (
-    <div>
-      <h1>Sign Up</h1>
-      <form onSubmit={handleSubmit(onValid)}>
+    <div className={`p-2 sm:p-4`}>
+      <h1 className={`font-bold text-white sm:text-lg`}>Login</h1>
+      <form
+        className={`mt-4 grid gap-2 rounded-lg border-[1px] border-gray-500 p-2 sm:p-4`}
+        onSubmit={handleSubmit(onValid)}
+      >
         {errors.email && (
-          <p className={`text-red-500 font-bold`}>
+          <p className={`font-bold text-red-500 text-center`}>
             Please write proper email address.
           </p>
         )}
         <input
+          className={`mx-auto rounded-lg px-2 py-1 sm:w-1/2`}
           {...register("email", {
             required: "Email is required",
             validate: {
@@ -63,11 +67,12 @@ const Login: NextPage = () => {
           placeholder="sample@sample.com"
         />
         {errors.password && (
-          <p className={`text-red-500 font-bold`}>
+          <p className={`font-bold text-red-500 text-center`}>
             Please write your password.
           </p>
         )}
         <input
+          className={`mx-auto rounded-lg px-2 py-1 sm:w-1/2`}
           {...register("password", {
             required: "Password is required",
             validate: {
@@ -79,16 +84,22 @@ const Login: NextPage = () => {
         />
         <button
           type="submit"
-          className={loading ? `bg-slate-800 text-red-200 font-bold` : ""}
+          className={`${
+            loading ? `text-red-200` : `text-white`
+          } mt-2 w-max place-self-center  rounded-2xl bg-sky-500 px-2 text-xs font-bold transition-all duration-200 hover:scale-110 sm:px-4 sm:py-1 sm:text-base`}
         >
           {loading ? "Loading" : "Login"}
         </button>
       </form>
       {accountError && (
-        <>
-          <p className={`text-red-500 font-bold`}>Could not find your account.</p>
-          <p className={`text-red-500 font-bold`}>Please check your email and password.</p>
-        </>
+        <div className={`mt-4`}>
+          <p className={`font-bold text-red-500 text-center`}>
+            Could not find your account.
+          </p>
+          <p className={`font-bold text-red-500 text-center`}>
+            Please check your email and password.
+          </p>
+        </div>
       )}
     </div>
   );
