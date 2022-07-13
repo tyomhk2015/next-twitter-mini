@@ -17,9 +17,9 @@ interface IPost {
 }
 
 interface ILike {
-  id: number,
-  likedId: number,
-  postId: number
+  id: number;
+  likedId: number;
+  postId: number;
 }
 
 const Tweet = () => {
@@ -29,16 +29,20 @@ const Tweet = () => {
   const { data, mutate } = useSWR("/api/loggedUser");
 
   const toggleLike = async () => {
-    const likeExist = data?.likes?.find((like: ILike) => like.postId === Number(id) && like.likedId === data.id);
-    await (await fetch('/api/like', {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        likeId: likeExist ? likeExist.id : null,
-        postId: post?.id,
-        userId: data?.id
-      }),
-    })).json();
+    const likeExist = data?.likes?.find(
+      (like: ILike) => like.postId === Number(id) && like.likedId === data.id
+    );
+    await (
+      await fetch("/api/like", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          likeId: likeExist ? likeExist.id : null,
+          postId: post?.id,
+          userId: data?.id,
+        }),
+      })
+    ).json();
     mutate();
   };
 
@@ -56,16 +60,30 @@ const Tweet = () => {
   return (
     <>
       {post && (
-        <div>
-          <h1>Tweet ID: {post.authorId}</h1>
-          <p>{post.author.name}</p>
-          <p>{post.description}</p>
-          <button onClick={toggleLike}>
-            Like
+        <div className={`grid border-b-[1px] border-gray-500 p-4 text-white`}>
+          <p className={`font-bold`}>{post.author.name}</p>
+          <p className={`mt-4 rounded-lg border-[1px] border-gray-500 p-2`}>
+            {post.description}
+          </p>
+          <button className={`mt-2 place-self-end`} onClick={toggleLike}>
             <svg
-              className="w-6 h-6"
-              fill={data?.likes?.find((like: ILike) => like.postId === Number(id) && like.likedId === data.id) ? "#DD2222" : "none"}
-              stroke={data?.likes?.find((like: ILike) => like.postId === Number(id) && like.likedId === data.id) ? "#DD2222" : "currentColor"}
+              className="h-6 w-6"
+              fill={
+                data?.likes?.find(
+                  (like: ILike) =>
+                    like.postId === Number(id) && like.likedId === data.id
+                )
+                  ? "#DD2222"
+                  : "none"
+              }
+              stroke={
+                data?.likes?.find(
+                  (like: ILike) =>
+                    like.postId === Number(id) && like.likedId === data.id
+                )
+                  ? "#DD2222"
+                  : "currentColor"
+              }
               viewBox="0 0 24 24"
               xmlns="http://www.w3.org/2000/svg"
             >
